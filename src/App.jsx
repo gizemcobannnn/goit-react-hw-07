@@ -3,22 +3,26 @@ import ContactForm from "./components/ContactForm";
 import SearchBox from "./components/SearchBox";
 import ContactList from "./components/ContactList";
 import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "./redux/operations";
 
 
 function App() {
+  const dispatch = useDispatch();
+  const contactList = useSelector(state => state.contact.items);
+  const status = useSelector(state => state.contact.status)
+
   const [contacts, setContacts] = useState(() => {
     // LocalStorage'dan veri yükleme
     const storedContacts = JSON.parse(localStorage.getItem("personData"));
     return (
-      storedContacts || [
-        { id: "id-1", name: "Rosie Simpson", phone: "459-12-56" },
-        { id: "id-2", name: "Hermione Kline", phone: "443-89-12" },
-        { id: "id-3", name: "Eden Clements", phone: "645-17-79" },
-        { id: "id-4", name: "Annie Copeland", phone: "227-91-26" },
-      ]
+      storedContacts || contactList
     );
   });
-//     const value = useSelector(state => state.some.value);
+  //*dispatch ile fetchContacts çağrılır.
+  useEffect(()=>{
+    dispatch(fetchContacts);
+  },[dispatch]);
 
   useEffect(() => {
     // LocalStorage'ı güncelle
@@ -46,6 +50,7 @@ function App() {
       <ContactForm />
       <SearchBox  />
       <ContactList />
+      {status === "loading" && <p>Loading ...</p>}
     </div>
   );
 }

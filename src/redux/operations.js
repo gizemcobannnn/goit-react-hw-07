@@ -33,7 +33,18 @@ export const addContact = createAsyncThunk(
     }
   );
 
-  // src/redux/operations.js
+export const editContact = createAsyncThunk(
+  "contacts/editContact",
+  async(text,thunkAPI) => {
+    try{
+      const response = await axios.put(`/contacts/${text.id}`,text);
+      return response.data;
+    }catch(e){
+      return thunkAPI.rejectWithValue(e.message)
+    }
+  }
+  
+);
 
 export const deleteContact = createAsyncThunk(
     "contacts/deleteContact",
