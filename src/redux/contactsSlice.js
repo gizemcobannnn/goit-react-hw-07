@@ -1,6 +1,6 @@
  
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts } from './operations';
+import {  fetchContacts, addContact, editContact, deleteContact } from './operations';
 import { createSelector } from 'reselect'; // Import createSelector
 
   const initialState = {
@@ -14,29 +14,20 @@ import { createSelector } from 'reselect'; // Import createSelector
     error: null,
   };
   
+  
   export const contactsSlice=createSlice({
     name:'contacts',
     initialState,
-    reducers:{
-      addContact(state,action){
-        state.items.push(action.payload);
-      },
 
-      deleteContact(state,action){
-        state.items= state.items.filter(contact => contact.id !== action.payload);
+    reducers: {
+      updateSearchValue(state, action) {
+        state.searchValue = action.payload;
       },
-      
-      updateContact(state,action){
-        const index= state.items.findIndex((contact) => contact.id === action.payload.id);
-        if(index !== -1){
-          state.items[index]={...state.items[index],...action.payload}
-        }
-      }
     },
+
     extraReducers: builder => {
       builder
-      // eslint-disable-next-line no-unused-vars
-      .addCase(fetchContacts.pending, (state,action)=>{
+      .addCase(fetchContacts.pending, (state)=>{
         state.isLoading = true;
       })
       .addCase(fetchContacts.fulfilled, (state,action)=>{
@@ -53,8 +44,7 @@ import { createSelector } from 'reselect'; // Import createSelector
         state.error = null;
         state.items.push(action.payload);
       })
-      // eslint-disable-next-line no-unused-vars
-      .addCase(addContact.pending, (state,action)=>{
+      .addCase(addContact.pending, (state)=>{
         state.isLoading = false;
         state.error=null;
       })
@@ -63,19 +53,34 @@ import { createSelector } from 'reselect'; // Import createSelector
         state.error=action.payload;
       })
       .addCase(deleteContact.fulfilled, (state,action)=>{
-        state.isLoading = true;
+        state.isLoading = false;
         state.error=null;
         state.items = state.items.filter(item => item.id !== action.payload);
       })
-      // eslint-disable-next-line no-unused-vars
-      .addCase(deleteContact.pending, (state,action)=>{
-        state.isLoading = false;
+      .addCase(deleteContact.pending, (state)=>{
+        state.isLoading = true;
         state.error=null;
       })
       .addCase(deleteContact.rejected, (state,action)=>{
         state.isLoading = false;
         state.error=action.payload;
       })
+      .addCase(editContact.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(editContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        const index = state.items.findIndex((item) => item.id === action.payload.id);
+        if (index !== -1) {
+          state.items[index] = action.payload; // Update the contact
+        }
+      })
+      .addCase(editContact.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload; // Capture error
+      })
+
     }
   });
   
@@ -91,5 +96,4 @@ import { createSelector } from 'reselect'; // Import createSelector
       );
     }
   );
-    export const {addContact, deleteContact, updateContact} = contactsSlice.actions;
   export default contactsSlice.reducer;

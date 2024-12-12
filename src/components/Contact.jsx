@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 import Styles from "./Contact.module.css"
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../redux/contactsSlice";
+import { deleteContact } from "../redux/operations";
 const Contact = ({ contact }) => {
  
   const dispatch = useDispatch(); 
-  
+  const handleDelete = ()=>{
+    dispatch(deleteContact(contact.id))
+  }
 
   return (
     <div className={Styles.contact}>
@@ -49,7 +51,7 @@ const Contact = ({ contact }) => {
         {/* Silme Butonu */}
         <button
           className={Styles["delete-button"]}
-          onClick={() => dispatch(deleteContact(contact.id))} >
+          onClick={() => {handleDelete}} >
              Delete
         </button>
       </div>
@@ -59,7 +61,8 @@ const Contact = ({ contact }) => {
 
 Contact.propTypes = {
   contact: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,    name: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,    
+    name: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
   }).isRequired,
 };

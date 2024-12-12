@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Styles from "./ContactForm.module.css"
 import { useDispatch,useSelector } from "react-redux";
-import { addContact} from "../redux/contactsSlice";
+import { addContact} from "../redux/operations";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
@@ -34,7 +34,6 @@ const ContactForm = () => {
       return; // Ekleme işlemini durdur
     }
     const newContact = {
-      id: Date.now().toString(),
       name: values.username.trim(),
       phone: values.phone.trim(),
     };

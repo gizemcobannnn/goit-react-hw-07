@@ -8,7 +8,7 @@ const SearchBox = () => {
   const nameFilter = useSelector(selectNameFilter);
 
   function handleFilterChange(e){
-    dispatch(setFilter(e.target.value));
+    dispatch(setFilter(e.target.value.trim()));
   }
 
   return (
