@@ -40,9 +40,10 @@ import { createSelector } from 'reselect'; // Import createSelector
         state.error=action.payload;
       })
       .addCase(addContact.fulfilled, (state,action)=>{
-        state.isLoading = false;
-        state.error = null;
-        state.items.push(action.payload);
+        const newContact = action.payload.text
+        ? { name: action.payload.text.name, number: action.payload.text.phone }
+        : action.payload; // Adjust based on API response
+      state.items.push(newContact);
       })
       .addCase(addContact.pending, (state)=>{
         state.isLoading = false;

@@ -44,14 +44,14 @@ const Contact = ({ contact }) => {
                 fill="grey"
               />
             </svg>
-            <p  className={Styles.phonep} id="phone">{contact.phone}</p>
+            <p  className={Styles.phonep} id="phone">{contact.number}</p>
           </div>
         </div>
 
         {/* Silme Butonu */}
         <button
           className={Styles["delete-button"]}
-          onClick={() => {handleDelete}} >
+          onClick={handleDelete} >
              Delete
         </button>
       </div>
@@ -63,7 +63,7 @@ Contact.propTypes = {
   contact: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,    
     name: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
+    number: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
 };
 
